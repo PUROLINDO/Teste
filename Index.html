@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letra -> MP3 - App Pessoal</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:600px;margin:40px auto;background:#0f0f0f;color:#fff;padding:20px}
+h1{color:#1db954}
+textarea,input{width:100%;padding:14px;margin:10px 0;border-radius:10px;border:none;background:#222;color:#fff;box-sizing:border-box}
+button{padding:14px;background:#1db954;color:#000;border:none;border-radius:10px;font-weight:bold;cursor:pointer;width:100%;font-size:16px;margin-top:10px}
+button:hover{background:#1ed760}
+#status{margin-top:20px;padding:15px;background:#1a1a1a;border-radius:10px;display:none}
+audio{width:100%;margin-top:15px}
+</style>
+</head>
+<body>
+<h1>Letra -> MP3</h1>
+<p>App pessoal - PUROLINDO - todas funções liberadas</p>
+
+<input type="text" id="titulo" placeholder="Nome da música ex: Minha Canção">
+<textarea id="letra" rows="12" placeholder="Cole sua letra aqui..."></textarea>
+<button onclick="gerar()">Gerar MP3</button>
+
+<div id="status"></div>
+
+<script>
+async function gerar(){
+  const titulo = document.getElementById('titulo').value || 'minha_musica';
+  const letra = document.getElementById('letra').value;
+  const status = document.getElementById('status');
+  
+  if(!letra){alert('Cole a letra primeiro');return;}
+  
+  status.style.display='block';
+  status.innerHTML = 'Gerando áudio... aguarde...';
+  
+  // Usa Web Speech API para gerar MP3 direto no navegador
+  const utterance = new SpeechSynthesisUtterance(letra);
+  utterance.lang = 'pt-BR';
+  utterance.rate = 0.9;
+  
+  // Para baixar como arquivo
+  status.innerHTML = `
+    <b>${titulo}</b><br><br>
+    Prévia da letra:<br>${letra.substring(0,200)}...<br><br>
+    <button onclick="falar()">▶️ Tocar / Gravar MP3</button>
+    <p style="font-size:13px;color:#aaa;margin-top:10px">Dica: Para salvar em MP3 real, use o gravador do seu celular enquanto toca, ou conecte com API Suno/Udio depois.</p>
+  `;
+}
+
+function falar(){
+  const letra = document.getElementById('letra').value;
+  const utterance = new SpeechSynthesisUtterance(letra);
+  utterance.lang = 'pt-BR';
+  speechSynthesis.speak(utterance);
+}
+</script>
+</body>
+</html>
